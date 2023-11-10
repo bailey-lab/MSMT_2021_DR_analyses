@@ -1,42 +1,43 @@
-rule all:
-	input:
-		IRNL='IRNL_prevalences_by_region.tsv',
-		IRNGEG='IRNGEG_prevalences_by_region.tsv',
-		k13='k13_prevalences_by_region.tsv',
-		dhfr='dhfr_prevalences_by_region.tsv',
-		dhps='dhps_prevalences_by_region.tsv',
-		k13_kagera='k13_kagera_prevalences_by_district.tsv'
+configfile: 'MSMT_2021_DR_analyses.yaml'
+variant_folder=config['variant_folder']
+#rule all:
+#	input:
+#		IRNL='IRNL_prevalences_by_region.tsv',
+#		IRNGEG='IRNGEG_prevalences_by_region.tsv',
+#		k13='k13_prevalences_by_region.tsv',
+#		dhfr='dhfr_prevalences_by_region.tsv',
+#		dhps='dhps_prevalences_by_region.tsv',
+#		k13_kagera='k13_kagera_prevalences_by_district.tsv'
 
 rule get_UMIs:
 	input:
-		cov_counts=
-		alt_counts=
-		ref_counts=
+		cov_counts=variant_folder+'/coverage_AA_table.csv',
+		alt_counts=variant_folder+'/alternate_AA_table.csv',
+		ref_counts=variant_folder+'/reference_AA_table.csv'
 	output:
-		
+		UMI_counts='counts/all_AA_counts.pkl'
 	script:
-		get_UMIs.py
+		'scripts/get_UMIs.py'
 
-rule get_metadata:
-	input:
-		metadata_sheet=
-	output:
-		metadata_file=
-	script:
-		'scripts/get_metadata'
 
 rule get_prevalences:
 	input:
-	params:
-		metadata=
-		thresholds=config['thresholds'] #any way to make this a wildcard across multiple named searches?
-		input_samples=
+		UMI_counts='counts/all_AA_counts.pkl',
+		metadata=config['metadata_sheet'],
 	output:
-		coverage_samples=
-		alternate_samples=
-		formatted_prevalences=
+		coverage_samples='prevalences/{mutation}_{region}_{cov}_{alt}_cov_samples.txt',
+		alternate_samples='prevalences/{mutation}_{region}_{cov}_{alt}_alt_samples.txt'
 	script:
 		'scripts/get_prevalences.py'
+
+'''
+rule make_table:
+	input:
+		numerator_samples='{sample_type}_{region}_{cov}_{alt}_alt_samples.txt,
+		denominator_samples='{sample_type}_{region}_{cov}_{alt}_cov_samples.txt,
+		metadata_sheet=config['metadata_sheet']
+	output:
+		
 
 rule intersect_samples:
 	input:
@@ -45,3 +46,4 @@ rule intersect_samples:
 		file_list=config['intersections']
 		
 	output:
+'''
