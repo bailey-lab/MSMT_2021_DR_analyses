@@ -9,6 +9,10 @@ variant_folder=config['variant_folder']
 #		dhps='dhps_prevalences_by_region.tsv',
 #		k13_kagera='k13_kagera_prevalences_by_district.tsv'
 
+rule all:
+	input:
+		summary='prevalences/Region:all_3_1_summary.tsv'
+
 rule get_UMIs:
 	input:
 		cov_counts=variant_folder+'/coverage_AA_table.csv',
@@ -30,15 +34,17 @@ rule get_prevalences:
 	script:
 		'scripts/get_prevalences.py'
 
-'''
+
 rule make_table:
 	input:
-		numerator_samples='{sample_type}_{region}_{cov}_{alt}_alt_samples.txt,
-		denominator_samples='{sample_type}_{region}_{cov}_{alt}_cov_samples.txt,
+		desired_files=expand('prevalences/{file}', file=config['prevalence_files']),
 		metadata_sheet=config['metadata_sheet']
 	output:
-		
+		summary='prevalences/{region}_{cov}_{alt}_summary.tsv'
+	script:
+		'scripts/make_table.py'
 
+'''
 rule intersect_samples:
 	input:
 		file_list=expand(config['intersections']['wildcard'])

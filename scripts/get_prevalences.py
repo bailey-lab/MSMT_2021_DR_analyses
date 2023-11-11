@@ -30,7 +30,7 @@ for line_number, line in enumerate(open(metadata)):
 			h[column]=column_number
 	else:
 		sample=line[h['Sample_ID']]
-		if region_type=='all' or line[h[region_type]]==region_value:
+		if region_value=='all' or line[h[region_type]]==region_value:
 			num, denom=check_thresholds(sample)
 			if denom:
 				coverage_samples.write(sample+'\n')

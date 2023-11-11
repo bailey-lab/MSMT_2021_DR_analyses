@@ -1,3 +1,19 @@
 snakemake -s MSMT_2021_DR_analyses.smk prevalences/k13-Arg561His_all:all_3_1_cov_samples.txt --cores 4
 snakemake -s MSMT_2021_DR_analyses.smk prevalences/k13-Arg561His_Region:Kagera_3_1_cov_samples.txt --cores 4
-
+snakemake -s MSMT_2021_DR_analyses.smk prevalences/dhfr-ts-Asn51Ile_all:all_3_1_cov_samples.txt --cores 4
+snakemake -s MSMT_2021_DR_analyses.smk prevalences/dhfr-ts-Cys59Arg_all:all_3_1_cov_samples.txt --cores 4
+snakemake -s MSMT_2021_DR_analyses.smk prevalences/dhfr-ts-Ser108Asn_all:all_3_1_cov_samples.txt --cores 4
+snakemake -s MSMT_2021_DR_analyses.smk prevalences/dhfr-ts-Ile164Leu_all:all_3_1_cov_samples.txt --cores 4
+snakemake -s MSMT_2021_DR_analyses.smk prevalences/dhps-Ala437Gly_all:all_3_1_cov_samples.txt --cores 4
+snakemake -s MSMT_2021_DR_analyses.smk prevalences/dhps-Lys540Glu_all:all_3_1_cov_samples.txt --cores 4
+snakemake -s MSMT_2021_DR_analyses.smk prevalences/dhps-Ala581Gly_all:all_3_1_cov_samples.txt --cores 4
+snakemake -s MSMT_2021_DR_analyses.smk prevalences/mdr1-Asn86Phe_all:all_3_1_cov_samples.txt --cores 4
+snakemake -s MSMT_2021_DR_analyses.smk prevalences/mdr1-Asn86Tyr_all:all_3_1_cov_samples.txt --cores 4
+snakemake -s MSMT_2021_DR_analyses.smk prevalences/mdr1-Tyr184Phe_all:all_3_1_cov_samples.txt --cores 4
+snakemake -s MSMT_2021_DR_analyses.smk prevalences/mdr1-Asp1246Tyr_all:all_3_1_cov_samples.txt --cores 4
+snakemake -s MSMT_2021_DR_analyses.smk prevalences/crt-Lys76Thr_all:all_3_1_cov_samples.txt --cores 4
+snakemake -s MSMT_2021_DR_analyses.smk prevalences/crt-Asn326Ser_all:all_3_1_cov_samples.txt --cores 4
+snakemake -s MSMT_2021_DR_analyses.smk prevalences/mdr2-Thr484Ile_all:all_3_1_cov_samples.txt --cores 4
+snakemake -s MSMT_2021_DR_analyses.smk prevalences/pph-Val1157Leu_all:all_3_1_cov_samples.txt --cores 4
+snakemake -s MSMT_2021_DR_analyses.smk prevalences/pib7-Cys1484Phe_all:all_3_1_cov_samples.txt --cores 4
+snakemake -s MSMT_2021_DR_analyses.smk prevalences/fd-Asp193Tyr_all:all_3_1_cov_samples.txt --cores 4
