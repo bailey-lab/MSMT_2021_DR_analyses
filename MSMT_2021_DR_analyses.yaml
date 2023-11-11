@@ -1,0 +1,23 @@
+variant_folder: /nfs/jbailey5/baileyweb/asimkin/MSMT_561H_paper/variant
+metadata_sheet: /nfs/jbailey5/baileyweb/asimkin/github_pipelines/MSMT_2021_DR_analyses/manuscript_metadata_attempted_samples.csv
+prevalence_files:
+  - k13-Arg561His_Region:all_3_1_cov_samples.txt
+  - k13-Arg561His_Region:Kagera_3_1_cov_samples.txt
+  - dhfr-ts-Asn51Ile_Region:all_3_1_cov_samples.txt
+  - dhfr-ts-Cys59Arg_Region:all_3_1_cov_samples.txt
+  - dhfr-ts-Ser108Asn_Region:all_3_1_cov_samples.txt
+  - dhfr-ts-Ile164Leu_Region:all_3_1_cov_samples.txt
+  - dhps-Ala437Gly_Region:all_3_1_cov_samples.txt
+  - dhps-Lys540Glu_Region:all_3_1_cov_samples.txt
+  - dhps-Ala581Gly_Region:all_3_1_cov_samples.txt
+  - mdr1-Asn86Phe_Region:all_3_1_cov_samples.txt
+  - mdr1-Asn86Tyr_Region:all_3_1_cov_samples.txt
+  - mdr1-Tyr184Phe_Region:all_3_1_cov_samples.txt
+  - mdr1-Asp1246Tyr_Region:all_3_1_cov_samples.txt
+  - crt-Lys76Thr_Region:all_3_1_cov_samples.txt
+  - crt-Asn326Ser_Region:all_3_1_cov_samples.txt
+  - mdr2-Thr484Ile_Region:all_3_1_cov_samples.txt
+  - pph-Val1157Leu_Region:all_3_1_cov_samples.txt
+  - pib7-Cys1484Phe_Region:all_3_1_cov_samples.txt
+  - fd-Asp193Tyr_Region:all_3_1_cov_samples.txt
+  - atp6-Ala623Glu_Region:all_3_1_cov_samples.txt
