@@ -11,7 +11,10 @@ variant_folder=config['variant_folder']
 
 rule all:
 	input:
-		summary='prevalences/Region:all_3_1_summary.tsv'
+		all_summary='prevalences/Region:all_3_1_summary.tsv',
+		Kagera_summary='prevalences/Region:Kagera_3_1_summary.tsv',
+		threshold_mutations=expand('prevalences_by_threshold/{threshold}_mutation_list.txt', threshold=config['prevalence_thresholds']),
+		background_mutations='background_mutations/561_on_Asian_backgrounds.tsv'
 
 rule get_UMIs:
 	input:
@@ -24,30 +27,56 @@ rule get_UMIs:
 		'scripts/get_UMIs.py'
 
 
-rule get_prevalences:
+rule prevalences_by_mutation:
 	input:
 		UMI_counts='counts/all_AA_counts.pkl',
 		metadata=config['metadata_sheet'],
 	output:
-		coverage_samples='prevalences/{mutation}_{region}_{cov}_{alt}_cov_samples.txt',
-		alternate_samples='prevalences/{mutation}_{region}_{cov}_{alt}_alt_samples.txt'
+		coverage_files=expand('prevalences/{mutation}_cov_samples.txt', mutation=config['mutations']),
+		alternate_files=expand('prevalences/{mutation}_alt_samples.txt', mutation=config['mutations'])
 	script:
 		'scripts/get_prevalences.py'
 
-
-rule make_table:
+rule get_threshold_prevalences:
 	input:
-		desired_files=expand('prevalences/{file}', file=config['prevalence_files']),
+		UMI_counts='counts/all_AA_counts.pkl',
+		metadata=config['metadata_sheet']
+	output:
+		filtered_mutations='prevalences_by_threshold/{threshold}_mutation_list.txt'
+	script:
+		'scripts/get_threshold_prevalences.py'
+
+rule check_background_mutations:
+	'''
+	checks to see if any Asian background K13 mutations exist
+	'''
+	input:
+		background_mutations=expand('prevalences/{mutation}_alt_samples.txt', mutation=config['background_mutations']),
+		foreground_mutation='prevalences/k13-Arg561His_Region:all_3_1_alt_samples.txt'
+	output:
+		background_mutations='background_mutations/561_on_Asian_backgrounds.tsv'
+	script:
+		'scripts/check_background_mutations.py'
+
+rule make_table_named_mutations:
+	input:
+		desired_files=expand('prevalences/{file}_cov_samples.txt', file=config['mutations']),
 		metadata_sheet=config['metadata_sheet']
+	params:
+		heirarchy=config['heirarchy']
 	output:
 		summary='prevalences/{region}_{cov}_{alt}_summary.tsv'
 	script:
 		'scripts/make_table.py'
 
+
+
 '''
+rule make_table_threshold_prevalences
+
 rule intersect_samples:
 	input:
-		file_list=expand(config['intersections']['wildcard'])
+		file_list=expand('prevalences/{file}_cov_samples.txt', file=config['mutations'])
 	params:
 		file_list=config['intersections']
 		

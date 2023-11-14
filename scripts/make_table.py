@@ -1,6 +1,8 @@
 prevalence_files=snakemake.input.desired_files
 metadata_sheet=snakemake.input.metadata_sheet
 summary=snakemake.output.summary
+heirarchy=snakemake.params.heirarchy
+heirarchy=heirarchy.split(':')
 
 def make_metadata_dict(metadata_sheet):
 	metadata_dict={}
@@ -22,12 +24,17 @@ metadata_dict, header_dict=make_metadata_dict(metadata_sheet)
 def get_counts(sample_file, category, filter_type):
 	parsed_counts={}
 	samples=[line.strip() for line in open(sample_file)]
+	category_index=heirarchy.index(category)
+	subsidiary=heirarchy[category_index+1]
 	for sample in samples:
 		metadata=metadata_dict[sample]
 		category_value=metadata[header_dict[category]]
+		subsidiary_value=metadata[header_dict[subsidiary]]
 		if filter_type=='all':
 			parsed_counts[category_value]=parsed_counts.setdefault(category_value, 0)+1
-			parsed_counts['overall']=parsed_counts.setdefault('overall', 0)+1
+		else:
+			parsed_counts[subsidiary_value]=parsed_counts.setdefault(subsidiary_value, 0)+1
+		parsed_counts['overall']=parsed_counts.setdefault('overall', 0)+1
 	return parsed_counts
 
 def format_line(prevalence_dict, category_value, filtered_files, output_table):
