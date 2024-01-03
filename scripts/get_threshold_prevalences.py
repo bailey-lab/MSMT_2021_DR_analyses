@@ -14,6 +14,10 @@ metadata=snakemake.input.metadata
 valid_samples=set([line.strip().split(',')[11] for line in open(metadata)][1:])
 #print('valid samples are', valid_samples)
 
+amino_acid_set=set(['Ala', 'Arg', 'Asn', 'Asp', 'Cys', 'Glu', 'Gln', 'Gly',
+'His', 'Ile', 'Leu', 'Lys', 'Met', 'Phe', 'Pro', 'Ser', 'Thr', 'Trp', 'Tyr',
+'Val'])
+
 UMI_counts=snakemake.input.UMI_counts
 UMI_counts=pickle.load(open(UMI_counts, 'rb'))
 
@@ -24,14 +28,17 @@ def check_thresholds(valid_samples, search_term, cov_threshold, alt_threshold, c
 	for sample in UMI_counts:
 		if sample in valid_samples:
 			for mutation in UMI_counts[sample]:
-#				print(search_term, mutation)
 				if search_term in mutation:
-					cov_dict.setdefault(mutation, [set([]), set([])])
-					cov, ref, alt=UMI_counts[sample][mutation]
-					if cov>=cov_threshold:
-						cov_dict[mutation][0].add(sample)
-					if alt>=alt_threshold and cov>=cov_threshold:
-						cov_dict[mutation][1].add(sample)
+					parsed_mutation=mutation.split('-')[-1]
+					start, end=parsed_mutation[:3], parsed_mutation[-3:]
+					middle=parsed_mutation[3:-3]
+					if middle.isdigit() and start in amino_acid_set and end in amino_acid_set and start!=end:
+						cov_dict.setdefault(mutation, [set([]), set([])])
+						cov, ref, alt=UMI_counts[sample][mutation]
+						if cov>=cov_threshold:
+							cov_dict[mutation][0].add(sample)
+						if alt>=alt_threshold and cov>=cov_threshold:
+							cov_dict[mutation][1].add(sample)
 	for mutation in list(cov_dict.keys()):
 		if len(cov_dict[mutation][1])<count_threshold:
 			cov_dict.pop(mutation)
@@ -43,7 +50,8 @@ cov_dict=check_thresholds(valid_samples, search_term, cov_threshold, alt_thresho
 filtered_mutations.write('\n'.join(list(cov_dict.keys())))
 cov_threshold, alt_threshold, count_threshold=map(str, [cov_threshold, alt_threshold, count_threshold])
 for mutation in cov_dict:
-	cov_file=open('prevalences_by_threshold/'+'_'.join([mutation, cov_threshold, alt_threshold, count_threshold, 'cov.txt']), 'w')
-	alt_file=open('prevalences_by_threshold/'+'_'.join([mutation, cov_threshold, alt_threshold, count_threshold, 'alt.txt']), 'w')
+	mutation_str=mutation.replace(' ', '_')
+	cov_file=open('prevalences_by_threshold/'+'_'.join([mutation_str, cov_threshold, alt_threshold, count_threshold, 'cov.txt']), 'w')
+	alt_file=open('prevalences_by_threshold/'+'_'.join([mutation_str, cov_threshold, alt_threshold, count_threshold, 'alt.txt']), 'w')
 	cov_file.write('\n'.join(list(cov_dict[mutation][0])))
 	alt_file.write('\n'.join(list(cov_dict[mutation][1])))

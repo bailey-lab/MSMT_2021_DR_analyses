@@ -94,8 +94,28 @@ mutations:
   - crt-Asn326Ser_Region:all_3_1
   - crt-Ile356Thr_Region:all_3_1
 prevalence_thresholds:
-  - all_10_3_3
-  - k13_3_1_3
+  - PF3D7-1322700_10_3_3
+  - PF3D7-1451200_10_3_3
+  - PI4K_10_3_3
+  - Pfap2mu_10_3_3
+  - Pfubp1_10_3_3
+  - Sec14_10_3_3
+  - arps10_10_3_3
+  - atp6_10_3_3
+  - crt_10_3_3
+  - cytb_10_3_3
+  - dhfr-ts_10_3_3
+  - dhps_10_3_3
+  - exo_10_3_3
+  - fd_10_3_3
+  - k13_10_3_3
+  - kelch10_10_3_3
+  - mcp_10_3_3
+  - mdr1_10_3_3
+  - mdr2_10_3_3
+  - pib7_10_3_3
+  - pph_10_3_3
+
 background_mutations:
   - crt-Asn326Ser_Region:all_3_1
   - crt-Ile356Thr_Region:all_3_1
