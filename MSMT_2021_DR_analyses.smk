@@ -19,6 +19,9 @@ rule all:
 
 
 rule get_UMIs:
+	'''
+	generates a pickled table of UMI counts
+	'''
 	input:
 		cov_counts=variant_folder+'/coverage_AA_table.csv',
 		alt_counts=variant_folder+'/alternate_AA_table.csv',
@@ -30,6 +33,12 @@ rule get_UMIs:
 
 
 rule prevalences_by_mutation:
+	'''
+	generates a list of which samples have alternate and coverage levels greater
+	than some threshold for a given mutation (thresholds are baked into
+	mutation names). Thresholds are coverage UMI count and alternate UMI count.
+	Format of mutation names is mutation_region_cov_alt
+	'''
 	input:
 		UMI_counts='counts/all_AA_counts.pkl',
 		metadata=config['metadata_sheet'],
@@ -40,6 +49,14 @@ rule prevalences_by_mutation:
 		'scripts/get_prevalences.py'
 
 rule get_threshold_prevalences:
+	'''
+	gets all mutations that pass a given set of thresholds, and the samples that
+	pass these thresholds for each mutation. Adds an additional threshold - in
+	addition to a minimum coverage and alternate UMI count, this code introduces
+	a minimum count of number of samples that the mutation is observed in.
+	Format is searchterm_cov_alt_count (where searchterm is e.g. a gene to
+	search within.)
+	'''
 	input:
 		UMI_counts='counts/all_AA_counts.pkl',
 		metadata=config['metadata_sheet']

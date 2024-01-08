@@ -1,6 +1,13 @@
 variant_folder: /nfs/jbailey5/baileyweb/asimkin/MSMT_561H_paper/variant
 metadata_sheet: /nfs/jbailey5/baileyweb/asimkin/github_pipelines/MSMT_2021_DR_analyses/manuscript_metadata_attempted_samples.csv
 heirarchy: 'Region:District:HF_name'
+
+#these are all the mutations that we want to analyze. Format is {mutation}_
+#{metadata-column}:{column-filter}_{coverage_threshold}_{alternate_threshold}
+#for example, if you wanted to know all of the samples from the 'region' column
+#of the metadata (broken down by each region) that had at least a coverage of 3
+#and an alternate count of 1 for the mutation dhfr-ts-Cys59Arg, you would enter
+#dhfr-ts-Cys59Arg_Region:all_3_1 as the mutation name.
 mutations:
   - dhfr-ts-Cys59Arg_Region:all_3_1
   - dhps-Ser436Phe_Region:all_3_1
