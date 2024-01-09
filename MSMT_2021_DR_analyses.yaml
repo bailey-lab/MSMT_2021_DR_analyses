@@ -2,6 +2,7 @@ variant_folder: /nfs/jbailey5/baileyweb/nlamber6/230731_DR23KE_IBC2F/DR23KE_vari
 metadata_sheet: /nfs/jbailey5/baileyweb/asimkin/other_people/nlamber6/DR23KE_prevalence_calculations/combined_metadata.csv
 heirarchy: site
 sample_column_name: Barcode
+summarize_by: site
 UMI_suffix: '-ArtR22RW-1'
 #these are all the mutations that we want to analyze. Format is {mutation}_
 #{metadata-column}:{column-filter}_{coverage_threshold}_{alternate_threshold}

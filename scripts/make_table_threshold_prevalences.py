@@ -1,6 +1,7 @@
 threshold_mutations=snakemake.input.threshold_mutations
 prevalence_files=[]
 sample_column=snakemake.params.sample_column
+summarize_by=snakemake.params.summarize_by
 for mutation_file in threshold_mutations:
 	print(mutation_file)
 	gene, cov, alt, count=mutation_file.split('/')[-1].split('_')[:4]
@@ -70,14 +71,14 @@ def format_table(prevalence_dict, category_values, output_header, filtered_files
 	format_line(prevalence_dict, 'overall', filtered_files, output_table)
 
 prevalence_dict={}
-category_type, filter_type='site', 'all'
+category_type, filter_type=summarize_by, 'all'
 categories=set([])
 output_header=[category_type]
 filtered_files=[]
 for prevalence_file in prevalence_files:
 	prefix='_'.join(prevalence_file.split('_')[:-1])
 	mutation, cov, alt, count=prevalence_file.split('/')[-1].split('_')[1:5]
-	obs_category, obs_filter='site', 'all'
+	obs_category, obs_filter=summarize_by, 'all'
 	if obs_filter==filter_type and obs_category==category_type:
 		filtered_files.append(prevalence_file)
 		output_header.append(mutation)
