@@ -11,14 +11,10 @@ variant_folder=config['variant_folder']
 
 rule all:
 	input:
-		all_summary='prevalences/site:all_3_1_summary.tsv',
+		all_summary='prevalences/'+config['summarize_by']+':all_3_1_summary.tsv',
 		threshold_summary='prevalences_by_threshold/10_3_3_summary.tsv',
 		background_mutations='background_mutations/561_on_Asian_backgrounds.tsv',
 		D_samples='prevalences/mdr1-Asp1246_3_1_cov.txt'
-
-#rule all:
-#	input:
-#		coverage_files=expand('prevalences/{mutation}_cov_samples.txt', mutation=config['mutations']),
 
 rule get_UMIs:
 	'''
@@ -75,11 +71,13 @@ rule get_threshold_prevalences:
 
 rule check_background_mutations:
 	'''
-	checks to see if any Asian background K13 mutations exist
+	checks to see if any Asian background mutations exist in samples that also
+	have R561H foreground mutation (asian background mutations are included in
+	config['mutations'] in addition to config['background_mutations'])
 	'''
 	input:
 		background_mutations=expand('prevalences/{mutation}_alt_samples.txt', mutation=config['background_mutations']),
-		foreground_mutation='prevalences/k13-Arg561His_site:all_3_1_alt_samples.txt'
+		foreground_mutation='prevalences/k13-Arg561His_'+config['summarize_by']+':all_3_1_alt_samples.txt'
 	output:
 		background_mutations='background_mutations/561_on_Asian_backgrounds.tsv'
 	script:
@@ -99,15 +97,15 @@ rule make_table_named_mutations:
 
 rule parse_NFD:
 	'''
-	NFD haplotype is a mixture of reference alleles (N and D) and mutant (F).
-	Looking for samples that have non-zero reference counts for N and D, and
-	non-zero alternate counts for F
+	NFD haplotype is a mixture of reference alleles (N and D) and mutant (F) for
+	the MDR1 gene. Looking for samples that have non-zero reference counts for N
+	and D, and non-zero alternate counts for F
 	'''
 	input:
 		UMI_counts='counts/all_AA_counts.pkl',
 		metadata=config['metadata_sheet'],
-		F_alt='prevalences/mdr1-Tyr184Phe_site:all_3_1_alt_samples.txt',
-		F_cov='prevalences/mdr1-Tyr184Phe_site:all_3_1_cov_samples.txt'
+		F_alt='prevalences/mdr1-Tyr184Phe_'+config['summarize_by']+':all_3_1_alt_samples.txt',
+		F_cov='prevalences/mdr1-Tyr184Phe_'+config['summarize_by']+':all_3_1_cov_samples.txt'
 	params:
 		N_mutation='mdr1-Asn86_3_1',
 		D_mutation='mdr1-Asp1246_3_1',
@@ -129,13 +127,17 @@ rule make_table_threshold_prevalences:
 		metadata_sheet=config['metadata_sheet']
 	params:
 		heirarchy=config['heirarchy'],
-		sample_column=config['sample_column_name']
+		sample_column=config['sample_column_name'],
+		summarize_by=config['summarize_by']
 	output:
 		summary='prevalences_by_threshold/{region}_{cov}_{alt}_summary.tsv'
 	script:
 		'scripts/make_table_threshold_prevalences.py'
 '''
 
+#this rule is not currently implemented - IRNL and IRNGEG prevalences are
+#currently calculated by manually intersecting the samples that pass thresholds
+#for each individual mutation
 rule intersect_samples:
 	input:
 		file_list=expand('prevalences/{file}_cov_samples.txt', file=config['mutations'])
