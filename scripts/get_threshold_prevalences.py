@@ -7,11 +7,17 @@ the mutation of interest in order to report it.
 '''
 import pickle
 filtered_mutations=snakemake.output.filtered_mutations
+sample_column=snakemake.params.sample_column
 search_term, cov_threshold, alt_threshold, count_threshold=filtered_mutations.split('/')[-1].split('_')[:4]
 cov_threshold, alt_threshold, count_threshold=map(int, [cov_threshold, alt_threshold, count_threshold])
 filtered_mutations=open(filtered_mutations, 'w')
 metadata=snakemake.input.metadata
-valid_samples=set([line.strip().split(',')[11] for line in open(metadata)][1:])
+header_dict={}
+column_names=open(metadata).readline().strip().split(',')
+for column_number, column_name in enumerate(column_names):
+	header_dict[column_name]=column_number
+sample_column=header_dict[sample_column]
+valid_samples=set([line.strip().split(',')[sample_column] for line in open(metadata)][1:])
 #print('valid samples are', valid_samples)
 
 amino_acid_set=set(['Ala', 'Arg', 'Asn', 'Asp', 'Cys', 'Glu', 'Gln', 'Gly',

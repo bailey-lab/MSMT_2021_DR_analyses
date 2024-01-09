@@ -3,6 +3,7 @@ cov_counts=snakemake.input.cov_counts
 alt_counts=snakemake.input.alt_counts
 ref_counts=snakemake.input.ref_counts
 UMI_counts=open(snakemake.output.UMI_counts, 'wb')
+UMI_suffix=snakemake.params.UMI_suffix
 
 def get_AA_counts(input_file):
 	mutation_dict={}
@@ -11,7 +12,7 @@ def get_AA_counts(input_file):
 			mutations=line.strip().split(',')[1:]
 		if line_number>5:
 			line=line.strip().split(',')
-			sample=line[0]
+			sample=line[0].replace(UMI_suffix, '')
 			counts=line[1:]
 			mutation_dict[sample]=list(map(int, (map(float, counts))))
 	return mutations, mutation_dict

@@ -4,6 +4,7 @@ UMI_counts=pickle.load(open(UMI_counts, 'rb'))
 metadata=snakemake.input.metadata
 coverage_files=snakemake.output.coverage_files
 alternate_files=snakemake.output.alternate_files
+sample_column=snakemake.params.sample_column
 
 def check_thresholds(sample):
 	num, denom=False, False
@@ -36,7 +37,7 @@ for sample_number, coverage_sample in enumerate(coverage_files):
 			for column_number, column in enumerate(line):
 				h[column]=column_number
 		else:
-			sample=line[h['Sample_ID']]
+			sample=line[h[sample_column]]
 			if region_value=='all' or region_value==line[h[region_type]]:
 				num, denom, found=check_thresholds(sample)
 				if found:

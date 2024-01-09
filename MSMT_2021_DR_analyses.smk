@@ -11,12 +11,14 @@ variant_folder=config['variant_folder']
 
 rule all:
 	input:
-		all_summary='prevalences/Region:all_3_1_summary.tsv',
-		Kagera_summary='prevalences/Region:Kagera_3_1_summary.tsv',
+		all_summary='prevalences/site:all_3_1_summary.tsv',
 		threshold_summary='prevalences_by_threshold/10_3_3_summary.tsv',
 		background_mutations='background_mutations/561_on_Asian_backgrounds.tsv',
 		D_samples='prevalences/mdr1-Asp1246_3_1_cov.txt'
 
+#rule all:
+#	input:
+#		coverage_files=expand('prevalences/{mutation}_cov_samples.txt', mutation=config['mutations']),
 
 rule get_UMIs:
 	'''
@@ -26,6 +28,8 @@ rule get_UMIs:
 		cov_counts=variant_folder+'/coverage_AA_table.csv',
 		alt_counts=variant_folder+'/alternate_AA_table.csv',
 		ref_counts=variant_folder+'/reference_AA_table.csv'
+	params:
+		UMI_suffix=config['UMI_suffix']
 	output:
 		UMI_counts='counts/all_AA_counts.pkl'
 	script:
@@ -42,6 +46,8 @@ rule prevalences_by_mutation:
 	input:
 		UMI_counts='counts/all_AA_counts.pkl',
 		metadata=config['metadata_sheet'],
+	params:
+		sample_column=config['sample_column_name']
 	output:
 		coverage_files=expand('prevalences/{mutation}_cov_samples.txt', mutation=config['mutations']),
 		alternate_files=expand('prevalences/{mutation}_alt_samples.txt', mutation=config['mutations'])
@@ -60,6 +66,8 @@ rule get_threshold_prevalences:
 	input:
 		UMI_counts='counts/all_AA_counts.pkl',
 		metadata=config['metadata_sheet']
+	params:
+		sample_column=config['sample_column_name']
 	output:
 		filtered_mutations='prevalences_by_threshold/{threshold}_mutation_list.txt'
 	script:
@@ -71,7 +79,7 @@ rule check_background_mutations:
 	'''
 	input:
 		background_mutations=expand('prevalences/{mutation}_alt_samples.txt', mutation=config['background_mutations']),
-		foreground_mutation='prevalences/k13-Arg561His_Region:all_3_1_alt_samples.txt'
+		foreground_mutation='prevalences/k13-Arg561His_site:all_3_1_alt_samples.txt'
 	output:
 		background_mutations='background_mutations/561_on_Asian_backgrounds.tsv'
 	script:
@@ -82,7 +90,8 @@ rule make_table_named_mutations:
 		desired_files=expand('prevalences/{file}_cov_samples.txt', file=config['mutations']),
 		metadata_sheet=config['metadata_sheet']
 	params:
-		heirarchy=config['heirarchy']
+		heirarchy=config['heirarchy'],
+		sample_column=config['sample_column_name']
 	output:
 		summary='prevalences/{region}_{cov}_{alt}_summary.tsv'
 	script:
@@ -97,11 +106,12 @@ rule parse_NFD:
 	input:
 		UMI_counts='counts/all_AA_counts.pkl',
 		metadata=config['metadata_sheet'],
-		F_alt='prevalences/mdr1-Tyr184Phe_Region:all_3_1_alt_samples.txt',
-		F_cov='prevalences/mdr1-Tyr184Phe_Region:all_3_1_cov_samples.txt'
+		F_alt='prevalences/mdr1-Tyr184Phe_site:all_3_1_alt_samples.txt',
+		F_cov='prevalences/mdr1-Tyr184Phe_site:all_3_1_cov_samples.txt'
 	params:
 		N_mutation='mdr1-Asn86_3_1',
-		D_mutation='mdr1-Asp1246_3_1'
+		D_mutation='mdr1-Asp1246_3_1',
+		sample_column=config['sample_column_name']
 	output:
 		N_ref='prevalences/mdr1-Asn86_3_1_ref.txt',
 		D_ref='prevalences/mdr1-Asp1246_3_1_ref.txt',
@@ -118,7 +128,8 @@ rule make_table_threshold_prevalences:
 		threshold_mutations=expand('prevalences_by_threshold/{threshold}_mutation_list.txt', threshold=config['prevalence_thresholds']),
 		metadata_sheet=config['metadata_sheet']
 	params:
-		heirarchy=config['heirarchy']
+		heirarchy=config['heirarchy'],
+		sample_column=config['sample_column_name']
 	output:
 		summary='prevalences_by_threshold/{region}_{cov}_{alt}_summary.tsv'
 	script:

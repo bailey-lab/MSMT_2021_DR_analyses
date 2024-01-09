@@ -2,7 +2,15 @@ import pickle
 UMI_counts=snakemake.input.UMI_counts
 UMI_counts=pickle.load(open(UMI_counts, 'rb'))
 metadata=snakemake.input.metadata
-valid_samples=set([line.strip().split(',')[11] for line in open(metadata)][1:])
+sample_column=snakemake.params.sample_column
+column_names=open(metadata).readline().strip().split(',')
+header_dict={}
+for column_number, column_name in enumerate(column_names):
+	header_dict[column_name]=column_number
+sample_column=header_dict[sample_column]
+valid_samples=set([line.strip().split(',')[sample_column] for line in open(metadata)][1:])
+
+
 
 N_ref=snakemake.output.N_ref
 D_ref=snakemake.output.D_ref
