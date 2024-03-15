@@ -1,3 +1,4 @@
+output_folder=snakemake.params.output_folder
 threshold_mutations=snakemake.input.threshold_mutations
 prevalence_files=[]
 for mutation_file in threshold_mutations:
@@ -8,7 +9,7 @@ for mutation_file in threshold_mutations:
 	for mutation in mutations:
 		mutation=mutation[1]
 		mutation=mutation.replace(' ', '_').strip()
-		prevalence_files.append('prevalences_by_threshold/'+'_'.join([mutation, cov, alt, count, 'cov.txt']))
+		prevalence_files.append(output_folder+'/prevalences_by_threshold/'+'_'.join([mutation, cov, alt, count, 'cov.txt']))
 
 metadata_sheet=snakemake.input.metadata_sheet
 summary=snakemake.output.summary

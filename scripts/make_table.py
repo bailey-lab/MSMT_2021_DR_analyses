@@ -63,8 +63,11 @@ categories=set([])
 output_header=[category_type]
 filtered_files=[]
 for prevalence_file in prevalence_files:
-	prefix='_'.join(prevalence_file.split('_')[:4])
-	mutation, region, cov, alt=prevalence_file.split('_')[:4]
+	print('prevalence file is', prevalence_file)
+	prefix='_'.join(prevalence_file.split('_')[:-2])
+	file_name=prevalence_file.split('/')[-1]
+	mutation, region, cov, alt=file_name.split('_')[:4]
+	print('region is', region)
 	obs_category, obs_filter=region.split(':')
 	if obs_filter==filter_type and obs_category==category_type:
 		filtered_files.append(prevalence_file)

@@ -7,6 +7,7 @@ the mutation of interest in order to report it.
 '''
 import pickle
 filtered_mutations=snakemake.output.filtered_mutations
+output_folder=snakemake.params.output_folder
 search_term, cov_threshold, alt_threshold, count_threshold=filtered_mutations.split('/')[-1].split('_')[:4]
 cov_threshold, alt_threshold, count_threshold=map(int, [cov_threshold, alt_threshold, count_threshold])
 filtered_mutations=open(filtered_mutations, 'w')
@@ -51,7 +52,7 @@ filtered_mutations.write('\n'.join(list(cov_dict.keys())))
 cov_threshold, alt_threshold, count_threshold=map(str, [cov_threshold, alt_threshold, count_threshold])
 for mutation in cov_dict:
 	mutation_str=mutation.replace(' ', '_')
-	cov_file=open('prevalences_by_threshold/'+'_'.join([mutation_str, cov_threshold, alt_threshold, count_threshold, 'cov.txt']), 'w')
-	alt_file=open('prevalences_by_threshold/'+'_'.join([mutation_str, cov_threshold, alt_threshold, count_threshold, 'alt.txt']), 'w')
+	cov_file=open(output_folder+'/prevalences_by_threshold/'+'_'.join([mutation_str, cov_threshold, alt_threshold, count_threshold, 'cov.txt']), 'w')
+	alt_file=open(output_folder+'/prevalences_by_threshold/'+'_'.join([mutation_str, cov_threshold, alt_threshold, count_threshold, 'alt.txt']), 'w')
 	cov_file.write('\n'.join(list(cov_dict[mutation][0])))
 	alt_file.write('\n'.join(list(cov_dict[mutation][1])))
