@@ -12,9 +12,9 @@ variant_folder=config['variant_folder']
 
 rule all:
 	input:
-		all_summary=output_folder+'/prevalences/Region:all_3_1_summary.tsv',
-		Kagera_summary=output_folder+'/prevalences/Region:Kagera_3_1_summary.tsv',
-		threshold_summary=output_folder+'/prevalences_by_threshold/10_3_3_summary.tsv',
+		all_summary=output_folder+'/summaries/Region:all_3_1_summary.tsv',
+		Kagera_summary=output_folder+'/summaries/Region:Kagera_3_1_summary.tsv',
+		threshold_summary=output_folder+'/summaries/10_3_3_threshold-summary.tsv',
 		background_mutations=output_folder+'/background_mutations/561_on_Asian_backgrounds.tsv',
 		D_samples=output_folder+'/prevalences/mdr1-Asp1246_3_1_cov.txt'
 
@@ -87,7 +87,7 @@ rule make_table_named_mutations:
 	params:
 		heirarchy=config['heirarchy']
 	output:
-		summary=output_folder+'/prevalences/{region}_{cov}_{alt}_summary.tsv'
+		summary=output_folder+'/summaries/{region}:{region_type}_{cov}_{alt}_summary.tsv'
 	script:
 		'scripts/make_table.py'
 
@@ -124,7 +124,7 @@ rule make_table_threshold_prevalences:
 		heirarchy=config['heirarchy'],
 		output_folder=config['output_folder']
 	output:
-		summary=output_folder+'/prevalences_by_threshold/{region}_{cov}_{alt}_summary.tsv'
+		summary=output_folder+'/summaries/{cov}_{alt}_{sample_count}_threshold-summary.tsv'
 	script:
 		'scripts/make_table_threshold_prevalences.py'
 '''
