@@ -76,6 +76,7 @@ fig2a <- ggplot()+
   theme(legend.title=element_text(size=12))
 
 
+
 #save plot
 ggsave("fig2A_k13_R561H.svg", dpi=600, width=6, height=5)
 ggsave("fig2A_k13_R561H.png", dpi=600, width=6, height=5)
@@ -136,6 +137,7 @@ fig2d <- ggplot()+
   theme(legend.title=element_blank())+
   theme(legend.text=element_text(size=12))+
   theme(legend.title=element_text(size=12))
+
 #save plot
 ggsave("fig2d_dhps_581.svg", dpi=600, width=6, height=5)
 ggsave("fig2d_dhps_581.png", dpi=600, width=6, height=5)
@@ -201,6 +203,8 @@ fig2c <- ggplot()+
   theme(legend.title=element_blank())+
   theme(legend.text=element_text(size=12))+
   theme(legend.title=element_text(size=12))
+
+
 #save plot
 ggsave("fig2c_dhfr_I164L.svg", dpi=600, width=6, height=5)
 ggsave("fig2c_dhfr_I164L.png", dpi=600, width=6, height=5)
@@ -227,9 +231,9 @@ fig2b <- ggplot()+
   geom_label_repel(data = kagera_aatable_bin_561_district, aes(x = lon, y = lat, label=name), size = 5,
                    color= "black", 
                    min.segment.length = 0,
-                   nudge_x = -0.1,
+                   nudge_x = -0.2,
                    box.padding = 0.1,
-                   nudge_y = 0.1,
+                   nudge_y = -0.1,
                    segment.curvature = -0.1,
                    segment.ncp = 3,
                    segment.angle = 20) +
@@ -248,10 +252,11 @@ fig2b <- ggplot()+
   annotate("text", x = 30.9, y = -0.9, label = "Uganda",
            color="grey60", size=4 , fontface="italic") +
   coord_sf(xlim = c(30.3, 32), ylim = c(-0.89,-3.4), expand = TRUE) +
-  theme(plot.background = element_rect(fill = "white"))+
+  #theme(plot.background = element_rect(fill = "white"))+
   theme(legend.text=element_text(size=12))+
   theme(legend.title=element_text(size=12)) +
   theme_void()
+
 
 #save plot
 ggsave("fig2B_kagera_R561H.svg", dpi=600, width=5, height=6)
@@ -259,8 +264,18 @@ ggsave("fig2B_kagera_R561H.png", dpi=600, width=5, height=6)
 
 library(patchwork)
 
+design <- "
+AAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBB#
+AAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBB#
+CCCCCCCCCCCCCCCCCCCDDDDDDDDDDDDDDDDDDD
+CCCCCCCCCCCCCCCCCCCDDDDDDDDDDDDDDDDDDD
+"
+
 fig2a + fig2b + fig2c + fig2d +
   plot_layout(ncol = 2, nrow = 2) +
   plot_annotation(tag_levels = "A")
 
-ggsave("Fig2.svg", dpi = 600, width = 16, height = 16)
+fig2a + fig2b + fig2c + fig2d +
+  plot_layout(design=design) +
+  plot_annotation(tag_levels = "A")
+ggsave("Fig2.svg", dpi = 600, width = 15, height = 13)
